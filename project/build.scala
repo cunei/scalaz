@@ -208,8 +208,8 @@ object build extends Build {
       OsgiKeys.importPackage := Seq("javax.swing;resolution:=optional", "*"),
       libraryDependencies <++= scalaVersion apply { sv =>
         if((sv startsWith "2.9") || (sv startsWith "2.10")) Seq.empty
-        else Seq("org.scala-lang" % "scala-xml" % sv,
-                 "org.scala-lang" % "scala-parser-combinators" % sv)      
+        else Seq("org.scala-lang.modules" % "scala-xml" % sv,
+                 "org.scala-lang.modules" % "scala-parser-combinators" % sv)      
       }
     )
   )
