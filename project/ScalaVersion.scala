@@ -13,14 +13,16 @@ final case class PreReleaseVersion(approaching: ReleaseVersion,
                                    suffix: PreReleaseSuffix) extends ScalaVersion
 sealed trait PreReleaseSuffix {
   def suffixString: String = this match {
-    case M(n)     => s"M$n"
-    case RC(n)    => s"RC$n"
-    case SNAPSHOT => "SNAPSHOT"
+    case M(n)      => s"M$n"
+    case RC(n)     => s"RC$n"
+    case SNAPSHOT  => "SNAPSHOT"
+    case Custom(z) => z
   }
 }
 case object SNAPSHOT extends PreReleaseSuffix
 case class M(n: Int) extends PreReleaseSuffix
 case class RC(n: Int) extends PreReleaseSuffix
+case class Custom(z: String) extends PreReleaseSuffix
 
 object ScalaVersion {
   def apply(version: String) =
@@ -32,7 +34,7 @@ object ScalaVersion {
       case List("SNAPSHOT") => SNAPSHOT
       case List("M", n)     => M(n.toInt)
       case List("RC", n)    => RC(n.toInt)
-      case _                => sys.error("could not parse: " + parts)
+      case List(z)          => Custom(z)
     }
     version.split(R).toList match {
       case List(epoch, major, minor) =>
